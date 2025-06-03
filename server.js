@@ -5,15 +5,18 @@ const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
 
+const cors = require('cors');
+app.use(cors());
+
 // Rota GET (listar todas as notas)
 app.get('/notas', (req, res) => {
-  const notas = JSON.parse(fs.readFileSync('notas.json'));
+  const notas = JSON.parse(fs.readFileSync(path.join(__dirname, 'notas.json')));
   res.json(notas);
 });
 
 // Rota POST (criar nota)
 app.post('/notas', (req, res) => {
-  const notas = JSON.parse(fs.readFileSync('notas.json'));
+  const notas = JSON.parse(fs.readFileSync(path.join(__dirname, 'notas.json')));
   notas.push(req.body);
   fs.writeFileSync('notas.json', JSON.stringify(notas, null, 2));
   res.status(201).json({ message: 'Nota criada!' });
@@ -21,7 +24,7 @@ app.post('/notas', (req, res) => {
 
 // Rota PUT (editar nota por ID)
 app.put('/notas/:id', (req, res) => {
-  const notas = JSON.parse(fs.readFileSync('notas.json'));
+  const notas = JSON.parse(fs.readFileSync(path.join(__dirname, 'notas.json')));
   const id = req.params.id;
   notas[id] = req.body;
   fs.writeFileSync('notas.json', JSON.stringify(notas, null, 2));
@@ -30,7 +33,7 @@ app.put('/notas/:id', (req, res) => {
 
 // Rota DELETE (excluir nota por ID)
 app.delete('/notas/:id', (req, res) => {
-  const notas = JSON.parse(fs.readFileSync('notas.json'));
+  const notas = JSON.parse(fs.readFileSync(path.join(__dirname, 'notas.json')));
   const id = req.params.id;
   notas.splice(id, 1);
   fs.writeFileSync('notas.json', JSON.stringify(notas, null, 2));
